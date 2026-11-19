@@ -63,9 +63,45 @@ li.task { list-style:none; margin-left:-1.2em; }
 .chart text[fill="#999"] { fill:#6e7681; }
 span[style*="#F28C28"] { color:#c9772c !important; } span[style*="#7B3FE4"] { color:#a371f7 !important; } span[style*="#2E7DD7"] { color:#6ca4f8 !important; }
 #hist td { font-size:14px; }
+
+nav.top .tools { margin-left:auto; display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.tool { display:flex; align-items:center; gap:6px; background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:3px 6px 3px 10px; }
+.tool .lbl { color:var(--muted); font-size:13px; }
+.tool button { background:var(--bg3); color:var(--fg); border:1px solid var(--line); border-radius:6px; padding:3px 10px; font:inherit; font-size:14px; cursor:pointer; line-height:1.4; }
+.tool button:hover { border-color:var(--muted); color:var(--fg-strong); }
+.tool button.sm { padding:3px 8px; min-width:28px; }
+.tool button.go { color:#3fb950; border-color:#238636; }
+.tool button.stop { color:#f0883e; border-color:#9e6a03; }
+.tool input[type=number] { width:58px; text-align:center; padding:3px 4px; }
+.tool input[type=range] { width:90px; accent-color:var(--accent); }
+.beat { width:10px; height:10px; border-radius:50%; background:var(--line); transition:background .06s; }
+.beat.hit { background:#c9772c; } .beat.hit.acc { background:#f0b45a; }
+#tmr-time { font-variant-numeric:tabular-nums; color:var(--fg-strong); font-weight:600; min-width:46px; text-align:right; }
+.tool.up { border-color:#2ea043; background:#0f2417; }
+.tool.up #tmr-time { color:#3fb950; }
+.tool label.acc { color:var(--muted); font-size:13px; display:flex; gap:4px; align-items:center; }
+.tool label.acc input { width:14px; height:14px; }
+@media (max-width: 900px) { nav.top .tools { margin-left:0; } }
 </style></head>
 <body>
-<nav class="top"><span class="brand">🎸 Fretboard Daily</span><a href="guide.html">Guide</a><a href="index.html#week-1-key-of-c">Week 1 · C</a><a href="index.html#week-2-key-of-g">Week 2 · G</a><a href="index.html#week-3-key-of-d">Week 3 · D</a><a href="index.html#week-4-key-of-a">Week 4 · A</a><a href="history.html">Practice history</a></nav>
+<nav class="top"><span class="brand">🎸 Fretboard Daily</span><a href="guide.html">Guide</a><a href="index.html#week-1-key-of-c" data-week="week-1-key-of-c">Week 1 · C</a><a href="index.html#week-2-key-of-g" data-week="week-2-key-of-g">Week 2 · G</a><a href="index.html#week-3-key-of-d" data-week="week-3-key-of-d">Week 3 · D</a><a href="index.html#week-4-key-of-a" data-week="week-4-key-of-a">Week 4 · A</a><a href="history.html">Practice history</a><div class="tools">
+  <div class="tool" id="met" title="Metronome (wood block)">
+    <span class="lbl">Metronome</span>
+    <span class="beat" id="met-beat"></span>
+    <button class="sm" id="met-dn" aria-label="Slower">−</button>
+    <input type="number" id="met-bpm" min="30" max="250" value="60" aria-label="BPM">
+    <button class="sm" id="met-up" aria-label="Faster">+</button>
+    <input type="range" id="met-rng" min="30" max="250" value="60" aria-label="BPM slider">
+    <label class="acc" title="Accent beat 1 of every 4"><input type="checkbox" id="met-acc" checked>Accent 1</label>
+    <button class="go" id="met-go">▶ Start</button>
+  </div>
+  <div class="tool" id="tmr" title="20-minute practice timer">
+    <span class="lbl">Practice</span>
+    <span id="tmr-time">20:00</span>
+    <button class="go" id="tmr-go">▶ Start timer</button>
+    <button class="sm" id="tmr-reset" title="Reset to 20:00" aria-label="Reset timer">↺</button>
+  </div>
+</div></nav>
 <main>
 <h1>Fretboard Daily: Triads, Sus Chords &amp; 7th Arpeggios</h1>
 <p class="muted">The 4-week program: C → G → D → A. Tick <strong>Done</strong> when you finish a day (it goes into your <a href="history.html">practice history</a>), and use the small box at the start of each row to mark the shapes you've practiced. New here? Start with the <a href="guide.html">Guide</a>.</p>
@@ -5915,7 +5951,7 @@ Each row starts from a different shape of the I chord and uses the closest IV, V
 <h4 id="chords-in-the-key_1">Chords in the key</h4>
 <table>
 <thead>
-<tr><th class="ck" title="Practiced">✓</th>
+<tr>
 <th>#</th>
 <th>Chord</th>
 <th>Root – 3rd – 5th</th>
@@ -5926,7 +5962,7 @@ Each row starts from a different shape of the I chord and uses the closest IV, V
 </tr>
 </thead>
 <tbody>
-<tr><td class="ck"><input type="checkbox" data-k="row:w1d7:4:0" aria-label="Practiced this row"></td>
+<tr>
 <td>⭐ I</td>
 <td><strong>G</strong></td>
 <td>G – B – D</td>
@@ -5935,7 +5971,7 @@ Each row starts from a different shape of the I chord and uses the closest IV, V
 <td>Gsus2: G A D</td>
 <td>Gsus4: G C D</td>
 </tr>
-<tr><td class="ck"><input type="checkbox" data-k="row:w1d7:4:1" aria-label="Practiced this row"></td>
+<tr>
 <td>⭐ ii</td>
 <td><strong>Am</strong></td>
 <td>A – C – E</td>
@@ -5944,7 +5980,7 @@ Each row starts from a different shape of the I chord and uses the closest IV, V
 <td>Asus2: A B E</td>
 <td>Asus4: A D E</td>
 </tr>
-<tr><td class="ck"><input type="checkbox" data-k="row:w1d7:4:2" aria-label="Practiced this row"></td>
+<tr>
 <td>iii</td>
 <td><strong>Bm</strong></td>
 <td>B – D – F#</td>
@@ -5953,7 +5989,7 @@ Each row starts from a different shape of the I chord and uses the closest IV, V
 <td>Bsus2: B C# F# ⚠️</td>
 <td>Bsus4: B E F#</td>
 </tr>
-<tr><td class="ck"><input type="checkbox" data-k="row:w1d7:4:3" aria-label="Practiced this row"></td>
+<tr>
 <td>⭐ IV</td>
 <td><strong>C</strong></td>
 <td>C – E – G</td>
@@ -5962,7 +5998,7 @@ Each row starts from a different shape of the I chord and uses the closest IV, V
 <td>Csus2: C D G</td>
 <td>Csus4: C F G ⚠️</td>
 </tr>
-<tr><td class="ck"><input type="checkbox" data-k="row:w1d7:4:4" aria-label="Practiced this row"></td>
+<tr>
 <td>⭐ V</td>
 <td><strong>D</strong></td>
 <td>D – F# – A</td>
@@ -5971,7 +6007,7 @@ Each row starts from a different shape of the I chord and uses the closest IV, V
 <td>Dsus2: D E A</td>
 <td>Dsus4: D G A</td>
 </tr>
-<tr><td class="ck"><input type="checkbox" data-k="row:w1d7:4:5" aria-label="Practiced this row"></td>
+<tr>
 <td>⭐ vi</td>
 <td><strong>Em</strong></td>
 <td>E – G – B</td>
@@ -5980,7 +6016,7 @@ Each row starts from a different shape of the I chord and uses the closest IV, V
 <td>Esus2: E F# B</td>
 <td>Esus4: E A B</td>
 </tr>
-<tr><td class="ck"><input type="checkbox" data-k="row:w1d7:4:6" aria-label="Practiced this row"></td>
+<tr>
 <td>vii°</td>
 <td><strong>F#°</strong></td>
 <td>F# – A – C</td>
@@ -11752,7 +11788,7 @@ Each row starts from a different shape of the I chord and uses the closest IV, V
 <h4 id="chords-in-the-key_2">Chords in the key</h4>
 <table>
 <thead>
-<tr><th class="ck" title="Practiced">✓</th>
+<tr>
 <th>#</th>
 <th>Chord</th>
 <th>Root – 3rd – 5th</th>
@@ -11763,7 +11799,7 @@ Each row starts from a different shape of the I chord and uses the closest IV, V
 </tr>
 </thead>
 <tbody>
-<tr><td class="ck"><input type="checkbox" data-k="row:w2d7:4:0" aria-label="Practiced this row"></td>
+<tr>
 <td>⭐ I</td>
 <td><strong>D</strong></td>
 <td>D – F# – A</td>
@@ -11772,7 +11808,7 @@ Each row starts from a different shape of the I chord and uses the closest IV, V
 <td>Dsus2: D E A</td>
 <td>Dsus4: D G A</td>
 </tr>
-<tr><td class="ck"><input type="checkbox" data-k="row:w2d7:4:1" aria-label="Practiced this row"></td>
+<tr>
 <td>⭐ ii</td>
 <td><strong>Em</strong></td>
 <td>E – G – B</td>
@@ -11781,7 +11817,7 @@ Each row starts from a different shape of the I chord and uses the closest IV, V
 <td>Esus2: E F# B</td>
 <td>Esus4: E A B</td>
 </tr>
-<tr><td class="ck"><input type="checkbox" data-k="row:w2d7:4:2" aria-label="Practiced this row"></td>
+<tr>
 <td>iii</td>
 <td><strong>F#m</strong></td>
 <td>F# – A – C#</td>
@@ -11790,7 +11826,7 @@ Each row starts from a different shape of the I chord and uses the closest IV, V
 <td>F#sus2: F# G# C# ⚠️</td>
 <td>F#sus4: F# B C#</td>
 </tr>
-<tr><td class="ck"><input type="checkbox" data-k="row:w2d7:4:3" aria-label="Practiced this row"></td>
+<tr>
 <td>⭐ IV</td>
 <td><strong>G</strong></td>
 <td>G – B – D</td>
@@ -11799,7 +11835,7 @@ Each row starts from a different shape of the I chord and uses the closest IV, V
 <td>Gsus2: G A D</td>
 <td>Gsus4: G C D ⚠️</td>
 </tr>
-<tr><td class="ck"><input type="checkbox" data-k="row:w2d7:4:4" aria-label="Practiced this row"></td>
+<tr>
 <td>⭐ V</td>
 <td><strong>A</strong></td>
 <td>A – C# – E</td>
@@ -11808,7 +11844,7 @@ Each row starts from a different shape of the I chord and uses the closest IV, V
 <td>Asus2: A B E</td>
 <td>Asus4: A D E</td>
 </tr>
-<tr><td class="ck"><input type="checkbox" data-k="row:w2d7:4:5" aria-label="Practiced this row"></td>
+<tr>
 <td>⭐ vi</td>
 <td><strong>Bm</strong></td>
 <td>B – D – F#</td>
@@ -11817,7 +11853,7 @@ Each row starts from a different shape of the I chord and uses the closest IV, V
 <td>Bsus2: B C# F#</td>
 <td>Bsus4: B E F#</td>
 </tr>
-<tr><td class="ck"><input type="checkbox" data-k="row:w2d7:4:6" aria-label="Practiced this row"></td>
+<tr>
 <td>vii°</td>
 <td><strong>C#°</strong></td>
 <td>C# – E – G</td>
@@ -17563,7 +17599,7 @@ Each row starts from a different shape of the I chord and uses the closest IV, V
 <h4 id="chords-in-the-key_3">Chords in the key</h4>
 <table>
 <thead>
-<tr><th class="ck" title="Practiced">✓</th>
+<tr>
 <th>#</th>
 <th>Chord</th>
 <th>Root – 3rd – 5th</th>
@@ -17574,7 +17610,7 @@ Each row starts from a different shape of the I chord and uses the closest IV, V
 </tr>
 </thead>
 <tbody>
-<tr><td class="ck"><input type="checkbox" data-k="row:w3d7:4:0" aria-label="Practiced this row"></td>
+<tr>
 <td>⭐ I</td>
 <td><strong>A</strong></td>
 <td>A – C# – E</td>
@@ -17583,7 +17619,7 @@ Each row starts from a different shape of the I chord and uses the closest IV, V
 <td>Asus2: A B E</td>
 <td>Asus4: A D E</td>
 </tr>
-<tr><td class="ck"><input type="checkbox" data-k="row:w3d7:4:1" aria-label="Practiced this row"></td>
+<tr>
 <td>⭐ ii</td>
 <td><strong>Bm</strong></td>
 <td>B – D – F#</td>
@@ -17592,7 +17628,7 @@ Each row starts from a different shape of the I chord and uses the closest IV, V
 <td>Bsus2: B C# F#</td>
 <td>Bsus4: B E F#</td>
 </tr>
-<tr><td class="ck"><input type="checkbox" data-k="row:w3d7:4:2" aria-label="Practiced this row"></td>
+<tr>
 <td>iii</td>
 <td><strong>C#m</strong></td>
 <td>C# – E – G#</td>
@@ -17601,7 +17637,7 @@ Each row starts from a different shape of the I chord and uses the closest IV, V
 <td>C#sus2: C# D# G# ⚠️</td>
 <td>C#sus4: C# F# G#</td>
 </tr>
-<tr><td class="ck"><input type="checkbox" data-k="row:w3d7:4:3" aria-label="Practiced this row"></td>
+<tr>
 <td>⭐ IV</td>
 <td><strong>D</strong></td>
 <td>D – F# – A</td>
@@ -17610,7 +17646,7 @@ Each row starts from a different shape of the I chord and uses the closest IV, V
 <td>Dsus2: D E A</td>
 <td>Dsus4: D G A ⚠️</td>
 </tr>
-<tr><td class="ck"><input type="checkbox" data-k="row:w3d7:4:4" aria-label="Practiced this row"></td>
+<tr>
 <td>⭐ V</td>
 <td><strong>E</strong></td>
 <td>E – G# – B</td>
@@ -17619,7 +17655,7 @@ Each row starts from a different shape of the I chord and uses the closest IV, V
 <td>Esus2: E F# B</td>
 <td>Esus4: E A B</td>
 </tr>
-<tr><td class="ck"><input type="checkbox" data-k="row:w3d7:4:5" aria-label="Practiced this row"></td>
+<tr>
 <td>⭐ vi</td>
 <td><strong>F#m</strong></td>
 <td>F# – A – C#</td>
@@ -17628,7 +17664,7 @@ Each row starts from a different shape of the I chord and uses the closest IV, V
 <td>F#sus2: F# G# C#</td>
 <td>F#sus4: F# B C#</td>
 </tr>
-<tr><td class="ck"><input type="checkbox" data-k="row:w3d7:4:6" aria-label="Practiced this row"></td>
+<tr>
 <td>vii°</td>
 <td><strong>G#°</strong></td>
 <td>G# – B – D</td>
@@ -23423,6 +23459,137 @@ Each row starts from a different shape of the I chord and uses the closest IV, V
       save();
     });
   });
+})();
+</script>
+<script>
+(function(){
+  var AC = window.AudioContext || window.webkitAudioContext, ctx = null;
+  function audio(){ if (!ctx) ctx = new AC(); if (ctx.state === 'suspended') ctx.resume(); return ctx; }
+  document.addEventListener('pointerdown', function(){ if (ctx && ctx.state === 'suspended') ctx.resume(); }, true);
+  function store(k, v){ try { if (v === undefined) return JSON.parse(localStorage.getItem(k)); localStorage.setItem(k, JSON.stringify(v)); } catch(e) { return null; } }
+
+  /* ---------- wood block metronome ---------- */
+  var noiseBuf = null;
+  function noise(c){ if (noiseBuf) return noiseBuf; noiseBuf = c.createBuffer(1, c.sampleRate * 0.03, c.sampleRate);
+    var d = noiseBuf.getChannelData(0); for (var i = 0; i < d.length; i++) d[i] = Math.random()*2-1; return noiseBuf; }
+  function block(t, accent){
+    var c = audio(), f = accent ? 1180 : 880, out = c.createGain();
+    out.gain.value = 0.9; out.connect(c.destination);
+    // body: a short resonant "tock" with a tiny downward pitch blip, like hollow wood
+    [1, 2.72].forEach(function(mult, i){
+      var o = c.createOscillator(), g = c.createGain(), bp = c.createBiquadFilter();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(f*mult*1.25, t); o.frequency.exponentialRampToValueAtTime(f*mult, t+0.008);
+      bp.type = 'bandpass'; bp.frequency.value = f*mult; bp.Q.value = 6;
+      var peak = (i === 0 ? 0.85 : 0.22) * (accent ? 1 : 0.8);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(peak, t+0.0015);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + (i === 0 ? 0.075 : 0.035));
+      o.connect(bp); bp.connect(g); g.connect(out); o.start(t); o.stop(t+0.1);
+    });
+    // knock: a very short filtered noise tick for the stick attack
+    var n = c.createBufferSource(), ng = c.createGain(), hp = c.createBiquadFilter();
+    n.buffer = noise(c); hp.type = 'bandpass'; hp.frequency.value = 2600; hp.Q.value = 1.2;
+    ng.gain.setValueAtTime(accent ? 0.35 : 0.25, t); ng.gain.exponentialRampToValueAtTime(0.0001, t+0.012);
+    n.connect(hp); hp.connect(ng); ng.connect(out); n.start(t); n.stop(t+0.02);
+    window.GP_CLICKS = (window.GP_CLICKS || 0) + 1;
+  }
+  var bpmIn = document.getElementById('met-bpm'), rng = document.getElementById('met-rng'), go = document.getElementById('met-go'),
+      acc = document.getElementById('met-acc'), dot = document.getElementById('met-beat');
+  var saved = store('gp-met') || {}; var bpm = saved.bpm || 60; acc.checked = saved.acc !== false;
+  function setBpm(v){ v = Math.max(30, Math.min(250, Math.round(+v || 60))); bpm = v; bpmIn.value = v; rng.value = v; store('gp-met', {bpm:bpm, acc:acc.checked}); }
+  setBpm(bpm);
+  bpmIn.addEventListener('change', function(){ setBpm(bpmIn.value); });
+  rng.addEventListener('input', function(){ setBpm(rng.value); });
+  document.getElementById('met-dn').addEventListener('click', function(){ setBpm(bpm - (bpm > 100 ? 5 : 2)); });
+  document.getElementById('met-up').addEventListener('click', function(){ setBpm(bpm + (bpm >= 100 ? 5 : 2)); });
+  acc.addEventListener('change', function(){ store('gp-met', {bpm:bpm, acc:acc.checked}); });
+  var running = false, nextT = 0, beat = 0, timerId = null;
+  function flash(when, isAcc){ var ms = Math.max(0, (when - audio().currentTime) * 1000);
+    setTimeout(function(){ dot.classList.add('hit'); dot.classList.toggle('acc', isAcc); setTimeout(function(){ dot.classList.remove('hit','acc'); }, 90); }, ms); }
+  function tick(){
+    var c = audio();
+    while (nextT < c.currentTime + 0.12) {
+      var a = acc.checked && beat % 4 === 0;
+      block(nextT, a); flash(nextT, a);
+      nextT += 60 / bpm; beat++;
+    }
+  }
+  function startMet(){ var c = audio(); running = true; beat = 0; nextT = c.currentTime + 0.06; tick(); timerId = setInterval(tick, 25);
+    go.textContent = '■ Stop'; go.className = 'stop'; }
+  function stopMet(){ running = false; clearInterval(timerId); go.textContent = '▶ Start'; go.className = 'go'; }
+  go.addEventListener('click', function(){ running ? stopMet() : startMet(); });
+  document.addEventListener('keydown', function(e){
+    if (e.target.matches('input[type=text], input[type=number], textarea')) return;
+    if (e.key === 'm' || e.key === 'M') { running ? stopMet() : startMet(); }
+  });
+
+  /* ---------- 20-minute practice timer with a calm chime ---------- */
+  var DUR = 20 * 60 * 1000;
+  var tEl = document.getElementById('tmr-time'), tGo = document.getElementById('tmr-go'), tBox = document.getElementById('tmr');
+  var T = store('gp-timer') || { state:'idle', remaining:DUR, end:0 };
+  var baseTitle = document.title, iv = null;
+  function fmt(ms){ var s = Math.ceil(ms/1000), m = Math.floor(s/60); s = s % 60; return m + ':' + (s < 10 ? '0' : '') + s; }
+  function left(){ return T.state === 'running' ? Math.max(0, T.end - Date.now()) : T.remaining; }
+  function chime(){
+    var c = audio(), notes = [523.25, 659.25, 783.99, 1046.5];  // C E G C, soft bell tones
+    var master = c.createGain(), lp = c.createBiquadFilter();
+    master.gain.value = 0.9; lp.type = 'lowpass'; lp.frequency.value = 3200;
+    master.connect(lp); lp.connect(c.destination);
+    [0, 4.2, 8.4].forEach(function(rep){
+      notes.forEach(function(f, i){
+        var t = c.currentTime + 0.05 + rep + i * 0.42;
+        [[1, 0.22], [2.0, 0.05], [2.76, 0.025]].forEach(function(p){
+          var o = c.createOscillator(), g = c.createGain();
+          o.type = 'sine'; o.frequency.value = f * p[0];
+          g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(p[1], t + 0.025);
+          g.gain.exponentialRampToValueAtTime(0.0001, t + (p[0] === 1 ? 3.6 : 1.6));
+          o.connect(g); g.connect(master); o.start(t); o.stop(t + 3.8);
+        });
+      });
+    });
+    window.GP_CHIMED = (window.GP_CHIMED || 0) + 1;
+  }
+  function paint(){
+    var ms = left(); tEl.textContent = fmt(ms);
+    tBox.classList.toggle('up', T.state === 'done');
+    if (T.state === 'running') { tGo.textContent = '❚❚ Pause'; tGo.className = 'stop'; document.title = '⏱ ' + fmt(ms) + ' · ' + baseTitle; }
+    else if (T.state === 'paused') { tGo.textContent = '▶ Resume'; tGo.className = 'go'; document.title = baseTitle; }
+    else if (T.state === 'done') { tGo.textContent = "✓ Time's up"; tGo.className = 'go'; tEl.textContent = '0:00'; document.title = "✓ Time's up · " + baseTitle; }
+    else { tGo.textContent = '▶ Start timer'; tGo.className = 'go'; document.title = baseTitle; }
+  }
+  function loop(){
+    if (T.state !== 'running') return;
+    if (left() <= 0) { var fresh = Date.now() - T.end < 15000; T = { state:'done', remaining:0, end:T.end }; store('gp-timer', T); if (fresh) chime(); }
+    paint();
+  }
+  function start(){ audio(); T = { state:'running', end:Date.now() + (T.state === 'paused' ? T.remaining : DUR), remaining:0 }; store('gp-timer', T); paint(); }
+  function pause(){ T = { state:'paused', remaining:left(), end:0 }; store('gp-timer', T); paint(); }
+  function reset(){ T = { state:'idle', remaining:DUR, end:0 }; store('gp-timer', T); paint(); }
+  tGo.addEventListener('click', function(){
+    if (T.state === 'running') pause(); else if (T.state === 'done') reset(); else start();
+  });
+  document.getElementById('tmr-reset').addEventListener('click', reset);
+  window.addEventListener('storage', function(e){ if (e.key === 'gp-timer') { T = store('gp-timer') || T; paint(); } });
+  if (T.state === 'running' && left() <= 0) { T = { state:'done', remaining:0, end:T.end }; store('gp-timer', T); }
+  paint(); iv = setInterval(loop, 250);
+  window.GP_TIMER = { chime:chime, block:block, get:function(){ return T; }, _setEnd:function(ms){ T.end = Date.now() + ms; store('gp-timer', T); } };
+
+  /* ---------- active state for week links while scrolling ---------- */
+  var navEl = document.querySelector('nav.top');
+  function pad(){ document.documentElement.style.scrollPaddingTop = (navEl.offsetHeight + 10) + 'px'; }
+  pad(); window.addEventListener('resize', pad);
+  var weekLinks = Array.prototype.slice.call(document.querySelectorAll('nav.top a[data-week]'));
+  var heads = weekLinks.map(function(a){ return document.getElementById(a.getAttribute('data-week')); }).filter(Boolean);
+  if (heads.length) {
+    var navH = document.querySelector('nav.top').offsetHeight;
+    var spy = function(){
+      var cur = null;
+      heads.forEach(function(h){ if (h.getBoundingClientRect().top - navH - 12 <= 0) cur = h.id; });
+      weekLinks.forEach(function(a){ a.classList.toggle('on', a.getAttribute('data-week') === cur); });
+    };
+    window.addEventListener('scroll', spy, { passive:true }); window.addEventListener('hashchange', function(){ setTimeout(spy, 50); });
+    spy(); setTimeout(spy, 300);
+  }
 })();
 </script>
 
