@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Fretboard Daily — Guide</title>
+<style>
+:root { --bg:#0d1117; --bg2:#151b23; --bg3:#1b222c; --fg:#d1d7e0; --fg-strong:#f0f6fc; --muted:#8b949e; --line:#30363d; --link:#6ca4f8; --accent:#c9772c; --ok:#3fb950; }
+* { box-sizing:border-box; }
+html { scroll-padding-top:56px; }
+body { margin:0; font:15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif; color:var(--fg); background:var(--bg); }
+a { color:var(--link); text-decoration:none; } a:hover { text-decoration:underline; }
+nav.top { position:sticky; top:0; z-index:10; background:var(--bg2); border-bottom:1px solid var(--line); padding:10px 28px; display:flex; flex-wrap:wrap; gap:6px 18px; align-items:center; }
+nav.top .brand { color:var(--fg-strong); font-weight:600; margin-right:8px; }
+nav.top a { font-weight:500; color:var(--fg); padding:3px 8px; border-radius:6px; }
+nav.top a:hover { background:var(--bg3); text-decoration:none; }
+nav.top a.on { background:var(--bg3); color:var(--fg-strong); box-shadow:inset 0 -2px 0 var(--accent); }
+main { width:100%; padding:20px 28px 80px; }
+h1,h2,h3,h4 { color:var(--fg-strong); }
+h1 { font-size:1.9rem; border-bottom:1px solid var(--line); padding-bottom:.3em; }
+h2 { font-size:1.5rem; border-bottom:1px solid var(--line); padding-bottom:.25em; margin-top:2em; }
+h3 { font-size:1.15rem; margin-top:2em; padding:8px 12px; background:var(--bg2); border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:6px; }
+h4 { font-size:1rem; margin-top:1.4em; }
+strong { color:var(--fg-strong); }
+table { width:100%; border-collapse:collapse; margin:10px 0 18px; background:var(--bg); }
+th, td { border:1px solid var(--line); padding:6.8px 8.5px; vertical-align:middle; text-align:left; }
+th { background:var(--bg2); color:var(--fg-strong); font-weight:600; }
+tbody tr:nth-child(even) td { background:#10151c; }
+tbody tr.didit td { background:#12261a !important; }
+td.ck, th.ck { width:34px; text-align:center; padding-left:4px; padding-right:4px; color:var(--muted); }
+table.has-chord th:nth-child(2), table.has-chord td:nth-child(2) { width:6.5%; white-space:nowrap; }
+td .chart svg { display:block; margin:0 auto 3px; }
+td:has(.chart) { text-align:center; font-size:13px; color:var(--muted); }
+p > .chart svg { max-width:100%; height:auto; }
+code { background:var(--bg3); color:var(--fg); padding:.1em .35em; border-radius:4px; font-size:.88em; }
+hr { border:0; border-top:1px solid var(--line); margin:2em 0; }
+input[type=checkbox] { width:17px; height:17px; accent-color:var(--ok); cursor:pointer; vertical-align:middle; }
+input[type=text], input[type=number] { background:var(--bg); color:var(--fg); border:1px solid var(--line); border-radius:6px; padding:4px 8px; font:inherit; }
+input[type=number] { width:70px; }
+.done { display:flex; flex-wrap:wrap; gap:8px 18px; align-items:center; padding:9px 12px; margin:8px 0 12px; background:var(--bg2); border:1px solid var(--line); border-radius:6px; }
+.done.is-done { border-color:#2ea043; background:#0f2417; }
+.done .notes { flex:1; min-width:220px; display:flex; gap:8px; align-items:center; }
+.done .notes input { flex:1; }
+.stamp { color:var(--ok); font-size:13px; }
+li.task { list-style:none; margin-left:-1.2em; }
+.btn { background:var(--bg3); color:var(--fg); border:1px solid var(--line); border-radius:6px; padding:5px 12px; font:inherit; cursor:pointer; }
+.btn:hover { border-color:var(--muted); }
+.btn.danger { color:#f85149; }
+.muted { color:var(--muted); }
+/* chart recolor for dark mode */
+.chart rect[fill="#ffffff"] { fill:#161b22; }
+.chart line[stroke="#555555"], .chart line[stroke="#555"] { stroke:#6e7681; }
+.chart text[fill="#222222"], .chart text[fill="#222"] { fill:#e6edf3; }
+.chart circle[fill="#222222"] { fill:#656c76; }
+.chart circle[fill="#F28C28"] { fill:#c9772c; }
+.chart circle[stroke="#F28C28"] { stroke:#c9772c; } .chart text[fill="#F28C28"] { fill:#c9772c; }
+.chart circle[fill="#7B3FE4"] { fill:#8257d6; }
+.chart circle[stroke="#7B3FE4"] { stroke:#8257d6; } .chart text[fill="#7B3FE4"] { fill:#8257d6; }
+.chart circle[fill="#2E7DD7"] { fill:#316dca; }
+.chart circle[stroke="#2E7DD7"] { stroke:#316dca; } .chart text[fill="#2E7DD7"] { fill:#316dca; }
+.chart circle[stroke="#222222"] { stroke:#8b949e; }
+.chart circle[fill="#9a9a9a"] { fill:#3d444d; }
+.chart text[fill="#888"] { fill:#8b949e; }
+.chart text[fill="#999"] { fill:#6e7681; }
+span[style*="#F28C28"] { color:#c9772c !important; } span[style*="#7B3FE4"] { color:#a371f7 !important; } span[style*="#2E7DD7"] { color:#6ca4f8 !important; }
+#hist td { font-size:14px; }
+</style></head>
+<body>
+<nav class="top"><span class="brand">🎸 Fretboard Daily</span><a href="guide.html" class="on">Guide</a><a href="index.html#week-1-key-of-c">Week 1 · C</a><a href="index.html#week-2-key-of-g">Week 2 · G</a><a href="index.html#week-3-key-of-d">Week 3 · D</a><a href="index.html#week-4-key-of-a">Week 4 · A</a><a href="history.html">Practice history</a></nav>
+<main>
+<h1 id="guide-how-this-program-works">Guide: how this program works</h1>
+<p>Built from my <strong>Practice Journal</strong>. Covers the keys of <strong>C, G, D and A</strong> and the chords worship songs use most: the <strong>I, ii, IV, V and vi</strong>.</p>
+<hr />
+<h2 id="how-to-use-this">How to use this</h2>
+<ul>
+<li><strong>One day = one small chunk, about 20 minutes.</strong> Do the day, tick its <strong>Done</strong> box (the date and time are logged automatically in Practice history; add your BPM and a quick note), and move to the next day tomorrow.</li>
+<li><strong>4-week cycle, one key per week:</strong> C → G → D → A. Each week adds one sharp, so you're also walking the circle of fifths. After week 4, start over and work faster or add the Level 2 items.</li>
+<li><strong>Say it out loud.</strong> For every note you play, say its name and its job in the chord: <em>"C, root… E, third… G, fifth."</em> That's how the notes and degrees stick.</li>
+<li><strong>Metronome:</strong> start at 60 bpm with one note per click. When a drill is clean twice in a row, go up 5 bpm.</li>
+<li>Every chart and fret number is on the Program page, organized week by week.</li>
+</ul>
+<h3 id="the-daily-20-minutes">The daily 20 minutes</h3>
+<table>
+<thead>
+<tr>
+<th>Time</th>
+<th>Block</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2 min</td>
+<td>Warm-up</td>
+<td>Stretch, then the Panama pinky drill (from the journal)</td>
+</tr>
+<tr>
+<td>3 min</td>
+<td>Note finder</td>
+<td>Find every note of today's chords on every string, frets 0–12, naming each one out loud</td>
+</tr>
+<tr>
+<td>10 min</td>
+<td>Main drill</td>
+<td>The day's assignment below</td>
+</tr>
+<tr>
+<td>5 min</td>
+<td>Make music</td>
+<td>Play a worship progression using only today's shapes (see "Progressions")</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="the-4-week-plan">The 4-week plan</h2>
+<table>
+<thead>
+<tr>
+<th>Week</th>
+<th>Key</th>
+<th>I</th>
+<th>ii</th>
+<th>IV</th>
+<th>V</th>
+<th>vi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>C</td>
+<td>C</td>
+<td>Dm</td>
+<td>F</td>
+<td>G</td>
+<td>Am</td>
+</tr>
+<tr>
+<td>2</td>
+<td>G</td>
+<td>G</td>
+<td>Am</td>
+<td>C</td>
+<td>D</td>
+<td>Em</td>
+</tr>
+<tr>
+<td>3</td>
+<td>D</td>
+<td>D</td>
+<td>Em</td>
+<td>G</td>
+<td>A</td>
+<td>Bm</td>
+</tr>
+<tr>
+<td>4</td>
+<td>A</td>
+<td>A</td>
+<td>Bm</td>
+<td>D</td>
+<td>E</td>
+<td>F#m</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-weekly-pattern">The weekly pattern</h3>
+<table>
+<thead>
+<tr>
+<th>Day</th>
+<th>Focus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Top strings (3-2-1): I, IV, V, vi + changes I→IV, I→V, I→vi</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Top strings (3-2-1): ii, plus sus2/sus4 on all five</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Middle strings (4-3-2): I, IV, V, vi + changes I→IV, I→V, I→vi</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Middle strings (4-3-2): ii, plus sus2/sus4 on all five</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Lower strings (5-4-3): all five chords + changes I→IV, I→V, I→vi; 6-5-4 if time</td>
+</tr>
+<tr>
+<td>6</td>
+<td>7th arpeggios from 6th- and 5th-string roots</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Put it together: progressions, scale fill, quiz</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Every day's charts are on the Program page.</strong> Jump to this week, find today, and play what's under it.</p>
+<hr />
+<h2 id="one-note-moves-sus-7ths-and-the-hidden-chords">One-note moves (sus, 7ths and the "hidden" chords)</h2>
+<p>Every chord on this page starts as a 3-note triad. You get the rest by moving <strong>one note</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Want</th>
+<th>Move this note</th>
+<th>Major triad</th>
+<th>Minor triad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>sus2</strong></td>
+<td>3rd <strong>down</strong> to the 2</td>
+<td>down 2 frets</td>
+<td>down 1 fret</td>
+</tr>
+<tr>
+<td><strong>sus4</strong></td>
+<td>3rd <strong>up</strong> to the 4</td>
+<td>up 1 fret</td>
+<td>up 2 frets</td>
+</tr>
+<tr>
+<td><strong>maj7</strong> (I, IV)</td>
+<td>root <strong>down</strong> to the 7</td>
+<td>down 1 fret</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>7 / m7</strong> (V, ii, vi)</td>
+<td>root <strong>down</strong> to the b7</td>
+<td>down 2 frets</td>
+<td>down 2 frets</td>
+</tr>
+</tbody>
+</table>
+<p>That last pair is the note in your journal: <em>"Major triad: move the root down a whole step for dominant 7, a half step for major 7."</em></p>
+<p><strong>Hidden chords</strong> (these help you see the neck as one big map):</p>
+<ul>
+<li><strong>Imaj7 with no root is the iii triad.</strong> In C: Cmaj7 = C E G B, and E G B = Em.</li>
+<li><strong>IVmaj7 contains the vi triad.</strong> In C: Fmaj7 = F A C E, and A C E = Am.</li>
+<li><strong>vi m7 is the I triad over a vi bass.</strong> In C: Am7 = A C E G, which is C over A. That's why vi and I swap so easily in worship songs.</li>
+<li><strong>A 1st inversion is a slash chord.</strong> With the 3rd on the bottom, C (E G C) sounds like <strong>C/E</strong>. Same with G/B and D/F#, the classic worship bass walk-ups.</li>
+</ul>
+<hr />
+<h2 id="progressions-for-the-make-music-block">Progressions (for the "make music" block)</h2>
+<p>Use Roman numerals so each one works in every key.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Progression</th>
+<th>Example in C</th>
+<th>Example in G</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The anthem</td>
+<td>I – V – vi – IV</td>
+<td>C G Am F</td>
+<td>G D Em C</td>
+</tr>
+<tr>
+<td>The lift</td>
+<td>I – IV – vi – V</td>
+<td>C F Am G</td>
+<td>G C Em D</td>
+</tr>
+<tr>
+<td>Minor start</td>
+<td>vi – IV – I – V</td>
+<td>Am F C G</td>
+<td>Em C G D</td>
+</tr>
+<tr>
+<td>Bridge build</td>
+<td>IV – I/3 – V – vi</td>
+<td>F C/E G Am</td>
+<td>C G/B D Em</td>
+</tr>
+<tr>
+<td>Turnaround</td>
+<td>IV – Vsus4 – V – I</td>
+<td>F Gsus4 G C</td>
+<td>C Dsus4 D G</td>
+</tr>
+</tbody>
+</table>
+<h3 id="voice-leading-how-to-move-between-shapes">Voice leading (how to move between shapes)</h3>
+<p>Move as few fingers as possible. In C on the top strings:</p>
+<ul>
+<li><strong>C → F:</strong> <code>x-x-x-5-5-3</code> → <code>x-x-x-5-6-5</code>. Two notes move one or two frets, and the C on the G string stays put.</li>
+<li><strong>C → G:</strong> <code>x-x-x-5-5-3</code> → <code>x-x-x-4-3-3</code>.</li>
+<li><strong>C → Am:</strong> <code>x-x-x-5-5-3</code> → <code>x-x-x-5-5-5</code>. Only one note moves (G up to A).</li>
+</ul>
+<p>Look for this in every key: the closest shape of the next chord is almost always within 2 frets.</p>
+<hr />
+<h2 id="level-2-open-items-from-the-practice-journal">Level 2 (open items from the Practice Journal)</h2>
+<p>Once a 4-week cycle feels comfortable, work these in as your Day 7 extra:</p>
+<ul>
+<li class="task"><label><input type="checkbox" data-k="l2:0"> C minor shape and E minor shape triad inversions</li>
+<li class="task"><label><input type="checkbox" data-k="l2:1"> Connect the C shape to the E shape on each string set</li>
+<li class="task"><label><input type="checkbox" data-k="l2:2"> Triad chord scale: play I ii iii IV V vi vii° up one string set without stopping</li>
+<li class="task"><label><input type="checkbox" data-k="l2:3"> Triad inversions of one chord around the circle of fifths</li>
+<li class="task"><label><input type="checkbox" data-k="l2:4"> Connect arpeggio shapes of the same chord (arpeggio octaves)</li>
+<li class="task"><label><input type="checkbox" data-k="l2:5"> Go through all the C shape triads: <em>where is the third, and how do I suspend it?</em> (this file's tables answer that)</li>
+<li class="task"><label><input type="checkbox" data-k="l2:6"> Diminished sound: A7 as a V chord going to Dm (harmonic minor)</li>
+</ul>
+<hr />
+<h2 id="notes-on-the-fretboard">Notes on the fretboard</h2>
+<p>Sharps are shown, and each one is also a flat (C# = Db). Frets 12 and up repeat from fret 0. Bold dots = natural notes, grey = sharps/flats.</p>
+<p><span class="chart"><svg xmlns="http://www.w3.org/2000/svg" width="726" height="166" viewBox="0 0 726 166" font-family="Helvetica, Arial, sans-serif">
+<rect width="726" height="166" fill="#ffffff" rx="6"/>
+<line x1="40" y1="136" x2="716" y2="136" stroke="#555555" stroke-width="1.2"/>
+<text x="18" y="140" font-size="12" font-weight="bold" fill="#222222">E</text>
+<line x1="40" y1="114" x2="716" y2="114" stroke="#555555" stroke-width="1.2"/>
+<text x="18" y="118" font-size="12" font-weight="bold" fill="#222222">A</text>
+<line x1="40" y1="92" x2="716" y2="92" stroke="#555555" stroke-width="1.2"/>
+<text x="18" y="96" font-size="12" font-weight="bold" fill="#222222">D</text>
+<line x1="40" y1="70" x2="716" y2="70" stroke="#555555" stroke-width="1.2"/>
+<text x="18" y="74" font-size="12" font-weight="bold" fill="#222222">G</text>
+<line x1="40" y1="48" x2="716" y2="48" stroke="#555555" stroke-width="1.2"/>
+<text x="18" y="52" font-size="12" font-weight="bold" fill="#222222">B</text>
+<line x1="40" y1="26" x2="716" y2="26" stroke="#555555" stroke-width="1.2"/>
+<text x="18" y="30" font-size="12" font-weight="bold" fill="#222222">e</text>
+<line x1="40" y1="26" x2="40" y2="136" stroke="#555555" stroke-width="1.2"/>
+<line x1="92" y1="26" x2="92" y2="136" stroke="#555555" stroke-width="5"/>
+<line x1="144" y1="26" x2="144" y2="136" stroke="#555555" stroke-width="1.2"/>
+<line x1="196" y1="26" x2="196" y2="136" stroke="#555555" stroke-width="1.2"/>
+<line x1="248" y1="26" x2="248" y2="136" stroke="#555555" stroke-width="1.2"/>
+<line x1="300" y1="26" x2="300" y2="136" stroke="#555555" stroke-width="1.2"/>
+<line x1="352" y1="26" x2="352" y2="136" stroke="#555555" stroke-width="1.2"/>
+<line x1="404" y1="26" x2="404" y2="136" stroke="#555555" stroke-width="1.2"/>
+<line x1="456" y1="26" x2="456" y2="136" stroke="#555555" stroke-width="1.2"/>
+<line x1="508" y1="26" x2="508" y2="136" stroke="#555555" stroke-width="1.2"/>
+<line x1="560" y1="26" x2="560" y2="136" stroke="#555555" stroke-width="1.2"/>
+<line x1="612" y1="26" x2="612" y2="136" stroke="#555555" stroke-width="1.2"/>
+<line x1="664" y1="26" x2="664" y2="136" stroke="#555555" stroke-width="1.2"/>
+<line x1="716" y1="26" x2="716" y2="136" stroke="#555555" stroke-width="1.2"/>
+<text x="66.0" y="156" font-size="11" text-anchor="middle" fill="#999" font-weight="normal">0</text>
+<text x="118.0" y="156" font-size="11" text-anchor="middle" fill="#999" font-weight="normal">1</text>
+<text x="170.0" y="156" font-size="11" text-anchor="middle" fill="#999" font-weight="normal">2</text>
+<text x="222.0" y="156" font-size="11" text-anchor="middle" fill="#222222" font-weight="bold">3</text>
+<text x="274.0" y="156" font-size="11" text-anchor="middle" fill="#999" font-weight="normal">4</text>
+<text x="326.0" y="156" font-size="11" text-anchor="middle" fill="#222222" font-weight="bold">5</text>
+<text x="378.0" y="156" font-size="11" text-anchor="middle" fill="#999" font-weight="normal">6</text>
+<text x="430.0" y="156" font-size="11" text-anchor="middle" fill="#222222" font-weight="bold">7</text>
+<text x="482.0" y="156" font-size="11" text-anchor="middle" fill="#999" font-weight="normal">8</text>
+<text x="534.0" y="156" font-size="11" text-anchor="middle" fill="#222222" font-weight="bold">9</text>
+<text x="586.0" y="156" font-size="11" text-anchor="middle" fill="#999" font-weight="normal">10</text>
+<text x="638.0" y="156" font-size="11" text-anchor="middle" fill="#999" font-weight="normal">11</text>
+<text x="690.0" y="156" font-size="11" text-anchor="middle" fill="#222222" font-weight="bold">12</text>
+<circle cx="66.0" cy="136" r="9.5" fill="#222222"/>
+<text x="66.0" y="139.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">E</text>
+<circle cx="118.0" cy="136" r="9.5" fill="#222222"/>
+<text x="118.0" y="139.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">F</text>
+<circle cx="170.0" cy="136" r="7.5" fill="#9a9a9a"/>
+<text x="170.0" y="139.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">F#</text>
+<circle cx="222.0" cy="136" r="9.5" fill="#222222"/>
+<text x="222.0" y="139.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">G</text>
+<circle cx="274.0" cy="136" r="7.5" fill="#9a9a9a"/>
+<text x="274.0" y="139.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">G#</text>
+<circle cx="326.0" cy="136" r="9.5" fill="#222222"/>
+<text x="326.0" y="139.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">A</text>
+<circle cx="378.0" cy="136" r="7.5" fill="#9a9a9a"/>
+<text x="378.0" y="139.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">A#</text>
+<circle cx="430.0" cy="136" r="9.5" fill="#222222"/>
+<text x="430.0" y="139.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">B</text>
+<circle cx="482.0" cy="136" r="9.5" fill="#222222"/>
+<text x="482.0" y="139.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">C</text>
+<circle cx="534.0" cy="136" r="7.5" fill="#9a9a9a"/>
+<text x="534.0" y="139.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">C#</text>
+<circle cx="586.0" cy="136" r="9.5" fill="#222222"/>
+<text x="586.0" y="139.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">D</text>
+<circle cx="638.0" cy="136" r="7.5" fill="#9a9a9a"/>
+<text x="638.0" y="139.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">D#</text>
+<circle cx="690.0" cy="136" r="9.5" fill="#222222"/>
+<text x="690.0" y="139.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">E</text>
+<circle cx="66.0" cy="114" r="9.5" fill="#222222"/>
+<text x="66.0" y="117.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">A</text>
+<circle cx="118.0" cy="114" r="7.5" fill="#9a9a9a"/>
+<text x="118.0" y="117.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">A#</text>
+<circle cx="170.0" cy="114" r="9.5" fill="#222222"/>
+<text x="170.0" y="117.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">B</text>
+<circle cx="222.0" cy="114" r="9.5" fill="#222222"/>
+<text x="222.0" y="117.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">C</text>
+<circle cx="274.0" cy="114" r="7.5" fill="#9a9a9a"/>
+<text x="274.0" y="117.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">C#</text>
+<circle cx="326.0" cy="114" r="9.5" fill="#222222"/>
+<text x="326.0" y="117.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">D</text>
+<circle cx="378.0" cy="114" r="7.5" fill="#9a9a9a"/>
+<text x="378.0" y="117.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">D#</text>
+<circle cx="430.0" cy="114" r="9.5" fill="#222222"/>
+<text x="430.0" y="117.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">E</text>
+<circle cx="482.0" cy="114" r="9.5" fill="#222222"/>
+<text x="482.0" y="117.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">F</text>
+<circle cx="534.0" cy="114" r="7.5" fill="#9a9a9a"/>
+<text x="534.0" y="117.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">F#</text>
+<circle cx="586.0" cy="114" r="9.5" fill="#222222"/>
+<text x="586.0" y="117.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">G</text>
+<circle cx="638.0" cy="114" r="7.5" fill="#9a9a9a"/>
+<text x="638.0" y="117.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">G#</text>
+<circle cx="690.0" cy="114" r="9.5" fill="#222222"/>
+<text x="690.0" y="117.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">A</text>
+<circle cx="66.0" cy="92" r="9.5" fill="#222222"/>
+<text x="66.0" y="95.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">D</text>
+<circle cx="118.0" cy="92" r="7.5" fill="#9a9a9a"/>
+<text x="118.0" y="95.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">D#</text>
+<circle cx="170.0" cy="92" r="9.5" fill="#222222"/>
+<text x="170.0" y="95.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">E</text>
+<circle cx="222.0" cy="92" r="9.5" fill="#222222"/>
+<text x="222.0" y="95.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">F</text>
+<circle cx="274.0" cy="92" r="7.5" fill="#9a9a9a"/>
+<text x="274.0" y="95.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">F#</text>
+<circle cx="326.0" cy="92" r="9.5" fill="#222222"/>
+<text x="326.0" y="95.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">G</text>
+<circle cx="378.0" cy="92" r="7.5" fill="#9a9a9a"/>
+<text x="378.0" y="95.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">G#</text>
+<circle cx="430.0" cy="92" r="9.5" fill="#222222"/>
+<text x="430.0" y="95.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">A</text>
+<circle cx="482.0" cy="92" r="7.5" fill="#9a9a9a"/>
+<text x="482.0" y="95.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">A#</text>
+<circle cx="534.0" cy="92" r="9.5" fill="#222222"/>
+<text x="534.0" y="95.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">B</text>
+<circle cx="586.0" cy="92" r="9.5" fill="#222222"/>
+<text x="586.0" y="95.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">C</text>
+<circle cx="638.0" cy="92" r="7.5" fill="#9a9a9a"/>
+<text x="638.0" y="95.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">C#</text>
+<circle cx="690.0" cy="92" r="9.5" fill="#222222"/>
+<text x="690.0" y="95.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">D</text>
+<circle cx="66.0" cy="70" r="9.5" fill="#222222"/>
+<text x="66.0" y="73.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">G</text>
+<circle cx="118.0" cy="70" r="7.5" fill="#9a9a9a"/>
+<text x="118.0" y="73.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">G#</text>
+<circle cx="170.0" cy="70" r="9.5" fill="#222222"/>
+<text x="170.0" y="73.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">A</text>
+<circle cx="222.0" cy="70" r="7.5" fill="#9a9a9a"/>
+<text x="222.0" y="73.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">A#</text>
+<circle cx="274.0" cy="70" r="9.5" fill="#222222"/>
+<text x="274.0" y="73.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">B</text>
+<circle cx="326.0" cy="70" r="9.5" fill="#222222"/>
+<text x="326.0" y="73.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">C</text>
+<circle cx="378.0" cy="70" r="7.5" fill="#9a9a9a"/>
+<text x="378.0" y="73.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">C#</text>
+<circle cx="430.0" cy="70" r="9.5" fill="#222222"/>
+<text x="430.0" y="73.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">D</text>
+<circle cx="482.0" cy="70" r="7.5" fill="#9a9a9a"/>
+<text x="482.0" y="73.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">D#</text>
+<circle cx="534.0" cy="70" r="9.5" fill="#222222"/>
+<text x="534.0" y="73.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">E</text>
+<circle cx="586.0" cy="70" r="9.5" fill="#222222"/>
+<text x="586.0" y="73.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">F</text>
+<circle cx="638.0" cy="70" r="7.5" fill="#9a9a9a"/>
+<text x="638.0" y="73.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">F#</text>
+<circle cx="690.0" cy="70" r="9.5" fill="#222222"/>
+<text x="690.0" y="73.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">G</text>
+<circle cx="66.0" cy="48" r="9.5" fill="#222222"/>
+<text x="66.0" y="51.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">B</text>
+<circle cx="118.0" cy="48" r="9.5" fill="#222222"/>
+<text x="118.0" y="51.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">C</text>
+<circle cx="170.0" cy="48" r="7.5" fill="#9a9a9a"/>
+<text x="170.0" y="51.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">C#</text>
+<circle cx="222.0" cy="48" r="9.5" fill="#222222"/>
+<text x="222.0" y="51.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">D</text>
+<circle cx="274.0" cy="48" r="7.5" fill="#9a9a9a"/>
+<text x="274.0" y="51.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">D#</text>
+<circle cx="326.0" cy="48" r="9.5" fill="#222222"/>
+<text x="326.0" y="51.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">E</text>
+<circle cx="378.0" cy="48" r="9.5" fill="#222222"/>
+<text x="378.0" y="51.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">F</text>
+<circle cx="430.0" cy="48" r="7.5" fill="#9a9a9a"/>
+<text x="430.0" y="51.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">F#</text>
+<circle cx="482.0" cy="48" r="9.5" fill="#222222"/>
+<text x="482.0" y="51.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">G</text>
+<circle cx="534.0" cy="48" r="7.5" fill="#9a9a9a"/>
+<text x="534.0" y="51.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">G#</text>
+<circle cx="586.0" cy="48" r="9.5" fill="#222222"/>
+<text x="586.0" y="51.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">A</text>
+<circle cx="638.0" cy="48" r="7.5" fill="#9a9a9a"/>
+<text x="638.0" y="51.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">A#</text>
+<circle cx="690.0" cy="48" r="9.5" fill="#222222"/>
+<text x="690.0" y="51.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">B</text>
+<circle cx="66.0" cy="26" r="9.5" fill="#222222"/>
+<text x="66.0" y="29.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">E</text>
+<circle cx="118.0" cy="26" r="9.5" fill="#222222"/>
+<text x="118.0" y="29.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">F</text>
+<circle cx="170.0" cy="26" r="7.5" fill="#9a9a9a"/>
+<text x="170.0" y="29.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">F#</text>
+<circle cx="222.0" cy="26" r="9.5" fill="#222222"/>
+<text x="222.0" y="29.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">G</text>
+<circle cx="274.0" cy="26" r="7.5" fill="#9a9a9a"/>
+<text x="274.0" y="29.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">G#</text>
+<circle cx="326.0" cy="26" r="9.5" fill="#222222"/>
+<text x="326.0" y="29.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">A</text>
+<circle cx="378.0" cy="26" r="7.5" fill="#9a9a9a"/>
+<text x="378.0" y="29.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">A#</text>
+<circle cx="430.0" cy="26" r="9.5" fill="#222222"/>
+<text x="430.0" y="29.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">B</text>
+<circle cx="482.0" cy="26" r="9.5" fill="#222222"/>
+<text x="482.0" y="29.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">C</text>
+<circle cx="534.0" cy="26" r="7.5" fill="#9a9a9a"/>
+<text x="534.0" y="29.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">C#</text>
+<circle cx="586.0" cy="26" r="9.5" fill="#222222"/>
+<text x="586.0" y="29.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">D</text>
+<circle cx="638.0" cy="26" r="7.5" fill="#9a9a9a"/>
+<text x="638.0" y="29.5" font-size="8" font-weight="bold" text-anchor="middle" fill="#fff">D#</text>
+<circle cx="690.0" cy="26" r="9.5" fill="#222222"/>
+<text x="690.0" y="29.5" font-size="10" font-weight="bold" text-anchor="middle" fill="#fff">E</text>
+</svg></span></p>
+<p><strong>Quick landmarks:</strong> E–F and B–C have no sharp between them. Fret 5 on each string equals the next string open, except on the G string, where fret 4 equals the open B.</p>
+<hr />
+<h2 id="how-to-read-the-chord-charts">How to read the chord charts</h2>
+<ul>
+<li>Each chart is a chord box: strings run <strong>low E (left) to high e (right)</strong>, and frets run top to bottom. <code>×</code> = don't play that string. A thick top line is the nut. Otherwise the number on the left (like <code>5fr</code>) is the fret the top row starts on.</li>
+<li>The dot labels tell you each note's job: <span style="color:#F28C28"><strong>R</strong> = root (orange)</span>, <strong>3</strong> and <strong>5</strong> = 3rd and 5th (black), <span style="color:#7B3FE4"><strong>2</strong> / <strong>4</strong> = the sus note (purple)</span>, <span style="color:#2E7DD7"><strong>7</strong> / <strong>b7</strong> = the 7th (blue)</span>.</li>
+<li>In the triad grids, the 3 shapes of each chord go <strong>up the neck</strong> from left to right. Under each chart: the inversion, the CAGED shape it comes from (to connect with your journal's diagrams), and the notes from low to high.</li>
+<li>In the sus tables, each row shows the <strong>triad</strong>, its <strong>sus2</strong> and its <strong>sus4</strong> side by side, so you can see the one finger that moves.</li>
+<li>Anything above fret 12 also works 12 frets lower when the open strings allow it.</li>
+</ul>
+<hr />
+</main>
+<script>
+(function(){
+  var KEY = 'gp-progress-v1';
+  function load(){ try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch(e) { return {}; } }
+  var S = load(); S.checks = S.checks || {}; S.fields = S.fields || {}; S.history = S.history || [];
+  function save(){
+    try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {}
+    // also keep a small cookie copy of the check marks (cookies are size-limited, so history lives in local storage)
+    try { var c = Object.keys(S.checks).filter(function(k){return S.checks[k];}).join(',');
+      if (c.length < 3800) document.cookie = 'gp_checks=' + encodeURIComponent(c) + ';max-age=' + (60*60*24*365*5) + ';path=/;SameSite=Lax'; } catch(e) {}
+  }
+  // first visit on a browser that only has the cookie: restore checks from it
+  if (!Object.keys(S.checks).length) {
+    var m = document.cookie.match(/(?:^|; )gp_checks=([^;]*)/);
+    if (m && m[1]) decodeURIComponent(m[1]).split(',').forEach(function(k){ if (k) S.checks[k] = true; });
+  }
+  function est(iso){
+    return new Date(iso).toLocaleString('en-US', { timeZone:'America/New_York', weekday:'short', month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit', timeZoneName:'short' });
+  }
+  window.GP = { S:S, save:save, est:est };
+
+  function lastFor(day){ for (var i = S.history.length-1; i >= 0; i--) if (S.history[i].day === day) return S.history[i]; return null; }
+  function paintDay(box){
+    var w = box.closest('.done'); if (!w) return;
+    var day = w.getAttribute('data-day'); var st = w.querySelector('.stamp');
+    w.classList.toggle('is-done', box.checked);
+    var h = lastFor(day);
+    st.textContent = (box.checked && h) ? ('Completed ' + est(h.iso)) : '';
+  }
+  function paintRow(box){ var tr = box.closest('tr'); if (tr) tr.classList.toggle('didit', box.checked); }
+
+  document.querySelectorAll('input[data-k]').forEach(function(b){
+    var k = b.getAttribute('data-k');
+    b.checked = !!S.checks[k];
+    if (k.indexOf('row:') === 0) paintRow(b);
+    if (k.indexOf('day:') === 0) paintDay(b);
+    b.addEventListener('change', function(){
+      S.checks[k] = b.checked;
+      if (k.indexOf('day:') === 0) {
+        var w = b.closest('.done');
+        if (b.checked) {
+          var day = w.getAttribute('data-day');
+          S.history.push({ day:day, label:w.getAttribute('data-label'), href:w.getAttribute('data-href'),
+            iso:new Date().toISOString(), bpm:S.fields['bpm:'+day]||'', notes:S.fields['notes:'+day]||'' });
+        }
+        save(); paintDay(b);
+      } else { save(); paintRow(b); }
+    });
+  });
+  document.querySelectorAll('input[data-f]').forEach(function(inp){
+    var f = inp.getAttribute('data-f');
+    inp.value = S.fields[f] || '';
+    inp.addEventListener('input', function(){
+      S.fields[f] = inp.value;
+      var day = f.split(':')[1], kind = f.split(':')[0];
+      if (S.checks['day:'+day]) { var h = lastFor(day); if (h) h[kind] = inp.value; }
+      save();
+    });
+  });
+})();
+</script>
+
+</body></html>

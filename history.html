@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Fretboard Daily — Practice history</title>
+<style>
+:root { --bg:#0d1117; --bg2:#151b23; --bg3:#1b222c; --fg:#d1d7e0; --fg-strong:#f0f6fc; --muted:#8b949e; --line:#30363d; --link:#6ca4f8; --accent:#c9772c; --ok:#3fb950; }
+* { box-sizing:border-box; }
+html { scroll-padding-top:56px; }
+body { margin:0; font:15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif; color:var(--fg); background:var(--bg); }
+a { color:var(--link); text-decoration:none; } a:hover { text-decoration:underline; }
+nav.top { position:sticky; top:0; z-index:10; background:var(--bg2); border-bottom:1px solid var(--line); padding:10px 28px; display:flex; flex-wrap:wrap; gap:6px 18px; align-items:center; }
+nav.top .brand { color:var(--fg-strong); font-weight:600; margin-right:8px; }
+nav.top a { font-weight:500; color:var(--fg); padding:3px 8px; border-radius:6px; }
+nav.top a:hover { background:var(--bg3); text-decoration:none; }
+nav.top a.on { background:var(--bg3); color:var(--fg-strong); box-shadow:inset 0 -2px 0 var(--accent); }
+main { width:100%; padding:20px 28px 80px; }
+h1,h2,h3,h4 { color:var(--fg-strong); }
+h1 { font-size:1.9rem; border-bottom:1px solid var(--line); padding-bottom:.3em; }
+h2 { font-size:1.5rem; border-bottom:1px solid var(--line); padding-bottom:.25em; margin-top:2em; }
+h3 { font-size:1.15rem; margin-top:2em; padding:8px 12px; background:var(--bg2); border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:6px; }
+h4 { font-size:1rem; margin-top:1.4em; }
+strong { color:var(--fg-strong); }
+table { width:100%; border-collapse:collapse; margin:10px 0 18px; background:var(--bg); }
+th, td { border:1px solid var(--line); padding:6.8px 8.5px; vertical-align:middle; text-align:left; }
+th { background:var(--bg2); color:var(--fg-strong); font-weight:600; }
+tbody tr:nth-child(even) td { background:#10151c; }
+tbody tr.didit td { background:#12261a !important; }
+td.ck, th.ck { width:34px; text-align:center; padding-left:4px; padding-right:4px; color:var(--muted); }
+table.has-chord th:nth-child(2), table.has-chord td:nth-child(2) { width:6.5%; white-space:nowrap; }
+td .chart svg { display:block; margin:0 auto 3px; }
+td:has(.chart) { text-align:center; font-size:13px; color:var(--muted); }
+p > .chart svg { max-width:100%; height:auto; }
+code { background:var(--bg3); color:var(--fg); padding:.1em .35em; border-radius:4px; font-size:.88em; }
+hr { border:0; border-top:1px solid var(--line); margin:2em 0; }
+input[type=checkbox] { width:17px; height:17px; accent-color:var(--ok); cursor:pointer; vertical-align:middle; }
+input[type=text], input[type=number] { background:var(--bg); color:var(--fg); border:1px solid var(--line); border-radius:6px; padding:4px 8px; font:inherit; }
+input[type=number] { width:70px; }
+.done { display:flex; flex-wrap:wrap; gap:8px 18px; align-items:center; padding:9px 12px; margin:8px 0 12px; background:var(--bg2); border:1px solid var(--line); border-radius:6px; }
+.done.is-done { border-color:#2ea043; background:#0f2417; }
+.done .notes { flex:1; min-width:220px; display:flex; gap:8px; align-items:center; }
+.done .notes input { flex:1; }
+.stamp { color:var(--ok); font-size:13px; }
+li.task { list-style:none; margin-left:-1.2em; }
+.btn { background:var(--bg3); color:var(--fg); border:1px solid var(--line); border-radius:6px; padding:5px 12px; font:inherit; cursor:pointer; }
+.btn:hover { border-color:var(--muted); }
+.btn.danger { color:#f85149; }
+.muted { color:var(--muted); }
+/* chart recolor for dark mode */
+.chart rect[fill="#ffffff"] { fill:#161b22; }
+.chart line[stroke="#555555"], .chart line[stroke="#555"] { stroke:#6e7681; }
+.chart text[fill="#222222"], .chart text[fill="#222"] { fill:#e6edf3; }
+.chart circle[fill="#222222"] { fill:#656c76; }
+.chart circle[fill="#F28C28"] { fill:#c9772c; }
+.chart circle[stroke="#F28C28"] { stroke:#c9772c; } .chart text[fill="#F28C28"] { fill:#c9772c; }
+.chart circle[fill="#7B3FE4"] { fill:#8257d6; }
+.chart circle[stroke="#7B3FE4"] { stroke:#8257d6; } .chart text[fill="#7B3FE4"] { fill:#8257d6; }
+.chart circle[fill="#2E7DD7"] { fill:#316dca; }
+.chart circle[stroke="#2E7DD7"] { stroke:#316dca; } .chart text[fill="#2E7DD7"] { fill:#316dca; }
+.chart circle[stroke="#222222"] { stroke:#8b949e; }
+.chart circle[fill="#9a9a9a"] { fill:#3d444d; }
+.chart text[fill="#888"] { fill:#8b949e; }
+.chart text[fill="#999"] { fill:#6e7681; }
+span[style*="#F28C28"] { color:#c9772c !important; } span[style*="#7B3FE4"] { color:#a371f7 !important; } span[style*="#2E7DD7"] { color:#6ca4f8 !important; }
+#hist td { font-size:14px; }
+</style></head>
+<body>
+<nav class="top"><span class="brand">🎸 Fretboard Daily</span><a href="guide.html">Guide</a><a href="index.html#week-1-key-of-c">Week 1 · C</a><a href="index.html#week-2-key-of-g">Week 2 · G</a><a href="index.html#week-3-key-of-d">Week 3 · D</a><a href="index.html#week-4-key-of-a">Week 4 · A</a><a href="history.html" class="on">Practice history</a></nav>
+<main>
+<h1>Practice history</h1>
+<p class="muted">Every time you tick <strong>Done</strong> on a day, it's logged here with the date and time (Eastern). Newest first. Entries: <span id="count">0</span>.</p>
+<p id="empty" class="muted">Nothing logged yet. Tick <strong>Done</strong> on a day in the <a href="index.html">program</a> and it will show up here.</p>
+<table id="hist"><thead><tr><th>Completed (Eastern)</th><th>Section</th><th>BPM</th><th>Notes</th><th>Timestamp (UTC)</th><th></th></tr></thead><tbody></tbody></table>
+<h2>Back up or move your progress</h2>
+<p class="muted">Your check marks and history are saved in this browser on this device. To keep a backup or move them to another device or browser, export them here and import the file there.</p>
+<p><button class="btn" id="exp">Export progress (.json)</button>
+&nbsp; <label class="btn">Import progress… <input type="file" id="impfile" accept="application/json,.json" style="display:none"></label>
+&nbsp; <span id="impmsg" class="muted"></span></p>
+
+</main>
+<script>
+(function(){
+  var KEY = 'gp-progress-v1';
+  function load(){ try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch(e) { return {}; } }
+  var S = load(); S.checks = S.checks || {}; S.fields = S.fields || {}; S.history = S.history || [];
+  function save(){
+    try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e) {}
+    // also keep a small cookie copy of the check marks (cookies are size-limited, so history lives in local storage)
+    try { var c = Object.keys(S.checks).filter(function(k){return S.checks[k];}).join(',');
+      if (c.length < 3800) document.cookie = 'gp_checks=' + encodeURIComponent(c) + ';max-age=' + (60*60*24*365*5) + ';path=/;SameSite=Lax'; } catch(e) {}
+  }
+  // first visit on a browser that only has the cookie: restore checks from it
+  if (!Object.keys(S.checks).length) {
+    var m = document.cookie.match(/(?:^|; )gp_checks=([^;]*)/);
+    if (m && m[1]) decodeURIComponent(m[1]).split(',').forEach(function(k){ if (k) S.checks[k] = true; });
+  }
+  function est(iso){
+    return new Date(iso).toLocaleString('en-US', { timeZone:'America/New_York', weekday:'short', month:'short', day:'numeric', year:'numeric', hour:'numeric', minute:'2-digit', timeZoneName:'short' });
+  }
+  window.GP = { S:S, save:save, est:est };
+
+  function lastFor(day){ for (var i = S.history.length-1; i >= 0; i--) if (S.history[i].day === day) return S.history[i]; return null; }
+  function paintDay(box){
+    var w = box.closest('.done'); if (!w) return;
+    var day = w.getAttribute('data-day'); var st = w.querySelector('.stamp');
+    w.classList.toggle('is-done', box.checked);
+    var h = lastFor(day);
+    st.textContent = (box.checked && h) ? ('Completed ' + est(h.iso)) : '';
+  }
+  function paintRow(box){ var tr = box.closest('tr'); if (tr) tr.classList.toggle('didit', box.checked); }
+
+  document.querySelectorAll('input[data-k]').forEach(function(b){
+    var k = b.getAttribute('data-k');
+    b.checked = !!S.checks[k];
+    if (k.indexOf('row:') === 0) paintRow(b);
+    if (k.indexOf('day:') === 0) paintDay(b);
+    b.addEventListener('change', function(){
+      S.checks[k] = b.checked;
+      if (k.indexOf('day:') === 0) {
+        var w = b.closest('.done');
+        if (b.checked) {
+          var day = w.getAttribute('data-day');
+          S.history.push({ day:day, label:w.getAttribute('data-label'), href:w.getAttribute('data-href'),
+            iso:new Date().toISOString(), bpm:S.fields['bpm:'+day]||'', notes:S.fields['notes:'+day]||'' });
+        }
+        save(); paintDay(b);
+      } else { save(); paintRow(b); }
+    });
+  });
+  document.querySelectorAll('input[data-f]').forEach(function(inp){
+    var f = inp.getAttribute('data-f');
+    inp.value = S.fields[f] || '';
+    inp.addEventListener('input', function(){
+      S.fields[f] = inp.value;
+      var day = f.split(':')[1], kind = f.split(':')[0];
+      if (S.checks['day:'+day]) { var h = lastFor(day); if (h) h[kind] = inp.value; }
+      save();
+    });
+  });
+})();
+</script>
+<script>
+(function(){
+  var S = GP.S, tb = document.querySelector('#hist tbody'), empty = document.getElementById('empty');
+  function esc(s){ return String(s||'').replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function render(){
+    var rows = S.history.map(function(h,i){ return [h,i]; }).sort(function(a,b){ return a[0].iso < b[0].iso ? 1 : -1; });
+    tb.innerHTML = rows.map(function(p){ var h = p[0], i = p[1];
+      return '<tr><td>' + esc(GP.est(h.iso)) + '</td><td><a href="' + esc(h.href) + '">' + esc(h.label) + '</a></td><td>' + esc(h.bpm) + '</td><td>' + esc(h.notes) +
+        '</td><td class="muted"><code>' + esc(h.iso) + '</code></td><td><button class="btn danger" data-del="' + i + '">Delete</button></td></tr>'; }).join('');
+    empty.style.display = rows.length ? 'none' : 'block';
+    document.getElementById('count').textContent = rows.length;
+  }
+  tb.addEventListener('click', function(e){
+    var i = e.target.getAttribute && e.target.getAttribute('data-del');
+    if (i === null || i === undefined) return;
+    S.history.splice(+i, 1); GP.save(); render();
+  });
+  document.getElementById('exp').addEventListener('click', function(){
+    var blob = new Blob([JSON.stringify(S, null, 2)], {type:'application/json'});
+    var a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = 'guitar-practice-progress-' + new Date().toISOString().slice(0,10) + '.json'; a.click();
+  });
+  document.getElementById('impfile').addEventListener('change', function(e){
+    var f = e.target.files[0]; if (!f) return;
+    f.text().then(function(t){ try { var d = JSON.parse(t);
+      S.checks = d.checks || {}; S.fields = d.fields || {}; S.history = d.history || []; GP.save(); render();
+      document.getElementById('impmsg').textContent = 'Imported ' + S.history.length + ' history entries and your check marks.';
+    } catch(err) { document.getElementById('impmsg').textContent = 'That file could not be read.'; } });
+  });
+  render();
+})();
+</script>
+</body></html>
